@@ -1,0 +1,197 @@
+-- MySQL dump 10.13  Distrib 8.0.46, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: pizzeria
+-- ------------------------------------------------------
+-- Server version	5.5.5-10.4.32-MariaDB
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `begudes`
+--
+
+DROP TABLE IF EXISTS `begudes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `begudes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `info_producte` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `info_producte` (`info_producte`),
+  CONSTRAINT `begudes_ibfk_1` FOREIGN KEY (`info_producte`) REFERENCES `productes` (`producte_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `botigues`
+--
+
+DROP TABLE IF EXISTS `botigues`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `botigues` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `adreca` varchar(255) DEFAULT NULL,
+  `codi_postal` int(11) DEFAULT NULL,
+  `localitat` varchar(255) DEFAULT NULL,
+  `provincia` varchar(255) DEFAULT NULL,
+  `empleats` int(11) DEFAULT NULL,
+  `comandes` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `empleats` (`empleats`),
+  KEY `comandes` (`comandes`),
+  CONSTRAINT `botigues_ibfk_1` FOREIGN KEY (`empleats`) REFERENCES `empleats` (`empleat_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `botigues_ibfk_2` FOREIGN KEY (`comandes`) REFERENCES `comandes` (`comanda_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `burgers`
+--
+
+DROP TABLE IF EXISTS `burgers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `burgers` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `info_producte` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `info_producte` (`info_producte`),
+  CONSTRAINT `burgers_ibfk_1` FOREIGN KEY (`info_producte`) REFERENCES `productes` (`producte_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `categories_pizzes`
+--
+
+DROP TABLE IF EXISTS `categories_pizzes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `categories_pizzes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nom_categoria` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `clients`
+--
+
+DROP TABLE IF EXISTS `clients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `clients` (
+  `client_id` int(11) NOT NULL AUTO_INCREMENT,
+  `adreca` varchar(255) DEFAULT NULL,
+  `codi_postal` int(11) DEFAULT NULL,
+  `localitat` varchar(255) DEFAULT NULL,
+  `provincia` varchar(255) DEFAULT NULL,
+  `telefon` int(11) DEFAULT NULL,
+  `comandes` int(11) DEFAULT NULL,
+  PRIMARY KEY (`client_id`),
+  KEY `comandes` (`comandes`),
+  CONSTRAINT `clients_ibfk_1` FOREIGN KEY (`comandes`) REFERENCES `comandes` (`comanda_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `comandes`
+--
+
+DROP TABLE IF EXISTS `comandes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `comandes` (
+  `comanda_id` int(11) NOT NULL AUTO_INCREMENT,
+  `data_comanda` datetime NOT NULL,
+  `productes` int(11) NOT NULL,
+  `tipus_comanda` enum('recollir','domicili') NOT NULL,
+  `quantitat_productes_pizzes` int(11) DEFAULT NULL,
+  `quantitat_productes_burgers` int(11) DEFAULT NULL,
+  `quantitat_productes_begudes` int(11) DEFAULT NULL,
+  `preu_total` decimal(10,0) NOT NULL,
+  `repartidor` int(11) DEFAULT NULL,
+  PRIMARY KEY (`comanda_id`),
+  KEY `productes` (`productes`),
+  CONSTRAINT `comandes_ibfk_1` FOREIGN KEY (`productes`) REFERENCES `productes` (`producte_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `empleats`
+--
+
+DROP TABLE IF EXISTS `empleats`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `empleats` (
+  `empleat_id` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(255) DEFAULT NULL,
+  `cognoms` varchar(255) DEFAULT NULL,
+  `nif` varchar(255) DEFAULT NULL,
+  `telefon` int(11) DEFAULT NULL,
+  `comandes` int(11) DEFAULT NULL,
+  PRIMARY KEY (`empleat_id`),
+  KEY `comandes` (`comandes`),
+  CONSTRAINT `empleats_ibfk_1` FOREIGN KEY (`comandes`) REFERENCES `comandes` (`comanda_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `pizzes`
+--
+
+DROP TABLE IF EXISTS `pizzes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pizzes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `info_producte` int(11) NOT NULL,
+  `categoria` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `categoria` (`categoria`),
+  KEY `info_producte` (`info_producte`),
+  CONSTRAINT `pizzes_ibfk_1` FOREIGN KEY (`categoria`) REFERENCES `categories_pizzes` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `pizzes_ibfk_2` FOREIGN KEY (`info_producte`) REFERENCES `productes` (`producte_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `productes`
+--
+
+DROP TABLE IF EXISTS `productes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `productes` (
+  `producte_id` int(11) NOT NULL AUTO_INCREMENT,
+  `nom` varchar(255) DEFAULT NULL,
+  `descripcio` varchar(255) DEFAULT NULL,
+  `imatge` mediumblob DEFAULT NULL,
+  `preu` int(11) DEFAULT NULL,
+  PRIMARY KEY (`producte_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2026-10-15 10:58:40
